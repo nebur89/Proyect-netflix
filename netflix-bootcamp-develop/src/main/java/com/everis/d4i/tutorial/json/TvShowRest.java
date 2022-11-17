@@ -19,6 +19,17 @@ public class TvShowRest implements Serializable {
 	private CategoryRest category;
 	private String advertising;
 
+
+	public TvShowRest() {}
+
+	public TvShowRest(long id){
+		this.id= id;
+	}
+	public TvShowRest(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public Long getId() {
 		return id;
 	}

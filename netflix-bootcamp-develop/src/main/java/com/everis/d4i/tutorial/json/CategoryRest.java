@@ -9,9 +9,25 @@ public class CategoryRest implements Serializable {
 
 	private static final long serialVersionUID = 180802329613616000L;
 
+
+	//Attributes
 	private Long id;
 	private String name;
 
+	//Builder
+
+	public CategoryRest(){}
+
+	public CategoryRest(String name) {
+		this.name = name;
+	}
+
+	public CategoryRest(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	//get and set
 	public Long getId() {
 		return id;
 	}

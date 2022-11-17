@@ -5,6 +5,7 @@ import java.util.List;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.ChapterRest;
 import com.everis.d4i.tutorial.responses.NetflixResponse;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface ChapterController {
 
@@ -14,4 +15,6 @@ public interface ChapterController {
 	NetflixResponse<ChapterRest> getChapterByTvShowIdAndSeasonNumberAndChapterNumber(Long tvShowId, short seasonNumber,
 			short chapterNumber) throws NetflixException;
 
+
+	NetflixResponse<String> renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter)throws NetflixException;
 }

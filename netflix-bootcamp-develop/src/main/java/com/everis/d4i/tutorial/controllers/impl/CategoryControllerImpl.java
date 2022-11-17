@@ -7,12 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.everis.d4i.tutorial.controllers.CategoryController;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
@@ -25,8 +20,8 @@ import com.everis.d4i.tutorial.utils.constants.RestConstants;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_CATEGORY)
-//@RequestMapping(RestConstants.RESOURCE_CATEGORY)
+//@RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_CATEGORY)
+@RequestMapping(RestConstants.RESOURCE_CATEGORY)
 public class CategoryControllerImpl implements CategoryController {
 
 	@Autowired
@@ -46,8 +41,10 @@ public class CategoryControllerImpl implements CategoryController {
 	public NetflixResponse<CategoryRest> createCategory(
 			@ApiParam(value = RestConstants.PARAMETER_CATEGORY, required = true) @RequestBody @Valid final CategoryRest categoryRest)
 			throws NetflixException {
-		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.CREATED), CommonConstants.OK,
 				categoryService.createCategories(categoryRest));
 	}
+
+
 
 }

@@ -12,4 +12,6 @@ public interface CategoryController {
 
 	NetflixResponse<CategoryRest> createCategory(CategoryRest categoryRest) throws NetflixException;
 
+
+
 }

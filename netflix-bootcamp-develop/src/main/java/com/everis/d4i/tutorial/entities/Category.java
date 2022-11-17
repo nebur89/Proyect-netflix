@@ -23,6 +23,7 @@ public class Category implements Serializable {
 	private String name;
 
 
+
 	//***RELATION ********************************
 
 	//Category
@@ -31,14 +32,23 @@ public class Category implements Serializable {
 	private Set<TvShow> tvShowsList;
 
 
+
+
 	//**BUILDER ********************************
 	public Category() {}
+
+	public Category(String name){
+		this.name=name;
+	}
 
 	public Category(Long categoryId, String name, Set<TvShow> tvShowsList) {
 		this.categoryId = categoryId;
 		this.name = name;
 	 this.tvShowsList = tvShowsList;
 	}
+
+
+
 
 	//*** GET AND SET ***********************************************
 

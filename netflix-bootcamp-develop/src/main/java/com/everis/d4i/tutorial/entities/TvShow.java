@@ -67,6 +67,11 @@ public class TvShow implements Serializable {
 
 	public TvShow() {}
 
+	public TvShow(Long tvShowId, String name){
+		this.tvShowId= tvShowId;
+		this.name= name;
+	}
+
 	public TvShow(Long tvShowId, String name, String shortDescription, String longDescription,
 				  Year year, byte recommendedAge, String advertising,  Set<Category> categoryList,
 				  List<Season> seasonsList , Set<Award> awardsList

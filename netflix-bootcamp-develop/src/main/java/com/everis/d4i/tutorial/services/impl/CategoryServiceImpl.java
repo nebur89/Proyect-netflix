@@ -35,6 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	public CategoryRest createCategories(final CategoryRest categoryRest) throws NetflixException {
+
+
 		Category category = new Category();
 		category.setName(categoryRest.getName());
 		try {
