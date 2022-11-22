@@ -27,21 +27,29 @@ public class CategoryControllerImpl implements CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
+
+
+
+	/* Return List category */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<List<CategoryRest>> getCategories() throws NetflixException {
+
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				categoryService.getCategories());
 	}
 
+
+	/* Create new category */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<CategoryRest> createCategory(
 			@ApiParam(value = RestConstants.PARAMETER_CATEGORY, required = true) @RequestBody @Valid final CategoryRest categoryRest)
 			throws NetflixException {
-		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.CREATED), CommonConstants.OK,
+
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				categoryService.createCategories(categoryRest));
 	}
 

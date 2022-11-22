@@ -1,5 +1,6 @@
 package com.everis.d4i.tutorial.services.impl;
 
+import java.lang.reflect.Executable;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,10 @@ import com.everis.d4i.tutorial.repositories.ChapterRepository;
 import com.everis.d4i.tutorial.services.ChapterService;
 import com.everis.d4i.tutorial.utils.constants.ExceptionConstants;
 
+import javax.persistence.EntityNotFoundException;
+
+
+/* CHAPTER SERVICE IMPLEMENT*/
 @Service
 public class ChapterServiceImpl implements ChapterService {
 
@@ -34,13 +39,21 @@ public class ChapterServiceImpl implements ChapterService {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
+
+	/* Return List chapter by tvShowId and seasonNumber*/
 	@Override
 	public List<ChapterRest> getChaptersByTvShowIdAndSeasonNumber(Long tvShowId, short seasonNumber)
 			throws NetflixException {
-		return chapterRepository.findBySeason_TvShow_TvShowIdAndSeason_Number(tvShowId, seasonNumber).stream()
+
+		return chapterRepository.findBySeason_TvShow_TvShowIdAndSeason_Number(tvShowId, seasonNumber)
+				.stream()
 				.map(chapter -> modelMapper.map(chapter, ChapterRest.class)).collect(Collectors.toList());
+
 	}
 
+
+
+	/* Return chapter by tvShowId , seasonNumber and chapterNumber*/
 	@Override
 	public ChapterRest getChapterByTvShowIdAndSeasonNumberAndChapterNumber(Long tvShowId, short seasonNumber,
 			short chapterNumber) throws NetflixException {
@@ -50,32 +63,17 @@ public class ChapterServiceImpl implements ChapterService {
 		return modelMapper.map(chapter, ChapterRest.class);
 	}
 
+
+
+	/* Rename chapter by tvShowId , seasonNumber and chapterNumber*/
 	@Override
-	public String renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter) throws NetflixException {
+	public void renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter) throws NetflixException {
 
-		Chapter chapter= new Chapter();
+			Chapter chapter = chapterRepository.findBySeason_TvShow_TvShowIdAndSeason_NumberAndNumber(tvShowId,seasonNumber,chapterNumber)
+					.orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_CHAPTER));
 
-		try {
-
-			Optional<Chapter> chapterOpt=  chapterRepository.findBySeason_TvShow_TvShowIdAndSeason_NumberAndNumber(tvShowId,seasonNumber,chapterNumber);
-			if(chapterOpt.isPresent()){
-
-				chapter=chapterOpt.get();
-				chapter.setName(newNameChapter);
-
-				chapterRepository.save(chapter);
-
-				return ServiceRestConstans.MESSAGE_UPDATE_CHAPTER;
-
-			} else {
-				return ExceptionConstants.MESSAGE_INEXISTENT_CHAPTER;
-			}
-
-		} catch (final Exception e) {
-
-			LOGGER.error(ExceptionConstants.INTERNAL_SERVER_ERROR, e);
-			throw new InternalServerErrorException(ExceptionConstants.INTERNAL_SERVER_ERROR);
-		}
+			chapter.setName(newNameChapter);
+			chapterRepository.save(chapter);
 
 	}
 }

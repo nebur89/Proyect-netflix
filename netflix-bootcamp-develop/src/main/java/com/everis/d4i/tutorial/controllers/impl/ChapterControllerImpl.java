@@ -19,10 +19,11 @@ import com.everis.d4i.tutorial.services.ChapterService;
 import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
 
+
+/* CHAPTER CONTROLLER IMPLEMENT*/
 @RestController
 //@RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_CHAPTER)
 @RequestMapping(RestConstants.RESOURCE_CHAPTER)
-
 public class ChapterControllerImpl implements ChapterController {
 
 
@@ -31,44 +32,53 @@ public class ChapterControllerImpl implements ChapterController {
 	@Autowired
 	private ChapterService chapterService;
 
+
+
+	/* Return List chapter by tvShow and seasonNumber*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<List<ChapterRest>> getChaptersByTvShowIdAndSeasonNumber(@PathVariable Long tvShowId,
-			@PathVariable short seasonNumber) throws NetflixException {
+	@GetMapping(value =RestConstants.RESOURCE_CHAPTER_LIST , produces = MediaType.APPLICATION_JSON_VALUE)
+	public NetflixResponse<List<ChapterRest>> getChaptersByTvShowIdAndSeasonNumber(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)	@PathVariable Long tvShowId,
+			@ApiParam(value = RestConstants.PARAMETER_SEASON_NUMBER, required = true) @PathVariable short seasonNumber)
+			throws NetflixException {
+
+
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				chapterService.getChaptersByTvShowIdAndSeasonNumber(tvShowId, seasonNumber));
 	}
 
+
+	/* Return chapter by seasonNumber and chapterNumber*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = RestConstants.RESOURCE_NUMBER, produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<ChapterRest> getChapterByTvShowIdAndSeasonNumberAndChapterNumber(@PathVariable Long tvShowId,
-			@PathVariable short seasonNumber, @PathVariable short number) throws NetflixException {
+	@GetMapping(value =RestConstants.RESOURCE_CHAPTER_NUMBER , produces = MediaType.APPLICATION_JSON_VALUE)
+	public NetflixResponse<ChapterRest> getChapterByTvShowIdAndSeasonNumberAndChapterNumber(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)	@PathVariable Long tvShowId,
+			@ApiParam(value = RestConstants.PARAMETER_SEASON_NUMBER, required = true) @PathVariable short seasonNumber,
+			@ApiParam(value = RestConstants.PARAMETER_CHAPTER_NUMBER, required = true) @PathVariable short chapterNumber)
+			throws NetflixException {
+
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
-				chapterService.getChapterByTvShowIdAndSeasonNumberAndChapterNumber(tvShowId, seasonNumber, number));
+				chapterService.getChapterByTvShowIdAndSeasonNumberAndChapterNumber(tvShowId, seasonNumber, chapterNumber));
 	}
 
 
+
+	/* Rename chapter by  tvShowId, seasonNumber and chapterNumber and chapterNumber*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping(value=RestConstants.RESOURCE_RENAME_CHAPTER, produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<String> renameChapter(
-			@ApiParam(value = RestConstants.DESCRIPTION_CHAPTER ,required = true)
-			@PathVariable Long tvShowId,
-			@PathVariable short seasonNumber,
-			@PathVariable short chapterNumber,
-			@PathVariable String newNameChapter )
+	public NetflixResponse<Void> renameChapter(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)	@PathVariable Long tvShowId,
+			@ApiParam(value = RestConstants.PARAMETER_SEASON_NUMBER, required = true) @PathVariable short seasonNumber,
+			@ApiParam(value = RestConstants.PARAMETER_CHAPTER_NUMBER, required = true) @PathVariable short chapterNumber,
+			@ApiParam(value = RestConstants.PARAMETER_CHAPTER_NAME, required = true) @PathVariable String newChapterName)
 			throws NetflixException {
 
-		System.out.println("ok");
-		LOGGER.info("ok");
+		chapterService.renameChapter(tvShowId, seasonNumber, chapterNumber, newChapterName);
 
-		String message= chapterService.renameChapter(tvShowId,seasonNumber, chapterNumber, newNameChapter);
-		String code= (message.equals(ServiceRestConstans.MESSAGE_UPDATE_CHAPTER))? String.valueOf(HttpStatus.OK):
-				String.valueOf(HttpStatus.NOT_FOUND);
-
-		return new  NetflixResponse<>(CommonConstants.SUCCESS, code, message);
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.NO_CONTENT), CommonConstants.OK);
 	}
 
 

@@ -3,11 +3,14 @@
 
 package com.everis.d4i.tutorial.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
+@JsonIgnoreProperties("chapterList")
 @Table(name = "ACTOR")
 public class Actor implements Serializable {
 

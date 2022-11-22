@@ -3,6 +3,7 @@ package com.everis.d4i.tutorial.controllers.impl;
 import java.util.List;
 
 
+import com.everis.d4i.tutorial.json.AwardRest;
 import com.everis.d4i.tutorial.utils.constants.ServiceRestConstans;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import com.everis.d4i.tutorial.utils.constants.RestConstants;
 
 import javax.validation.Valid;
 
+/*TV-SHOW CONTROLLER IMPLEMENT */
+
 @RestController
 //@RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_TV_SHOW)
 @RequestMapping(RestConstants.RESOURCE_TV_SHOW)
@@ -29,58 +32,74 @@ public class TvShowControllerImpl implements TvShowController {
 	private TvShowService tvShowService;
 
 
+
+	/*Return list TvShow by categoryId*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<List<TvShowRest>> getTvShowsByCategory(@RequestParam Long categoryId)
+	@GetMapping(value = RestConstants.RESOURCE_CATEGORY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
+	public NetflixResponse<List<TvShowRest>> getTvShowsByCategory(
+			@ApiParam(value = RestConstants.PARAMETER_CATEGORY_ID, required = true)  @PathVariable Long categoryId)
 			throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				tvShowService.getTvShowsByCategory(categoryId));
 	}
 
 
-
+	/*Return TvShow by idTvShow*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = RestConstants.RESOURCE_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<TvShowRest> getTvShowById(@PathVariable Long id) throws NetflixException {
+	public NetflixResponse<TvShowRest> getTvShowById(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)	@PathVariable Long id) throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				tvShowService.getTvShowById(id));
 	}
 
 
+
+	/*Rename  TvShow by idTvShow*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<String> renameTvShow(
-			@ApiParam(value = RestConstants.PARAMETER_CATEGORY, required = true) @RequestBody @Valid final	TvShowRest tvShowRest)
+	@PutMapping(value = RestConstants.RESOURCE_TV_SHOW_RENAME, produces = MediaType.APPLICATION_JSON_VALUE)
+	public NetflixResponse<Void> renameTvShow(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)  @PathVariable Long tvShowId,
+			@ApiParam( value = RestConstants.PARAMETER_TV_SHOW_NAME, required = true) @PathVariable  String tvShowName)
 			throws NetflixException {
 
-		String message= tvShowService.renameTvShow(tvShowRest);
+		tvShowService.renameTvShow(tvShowId, tvShowName);
 
-		String code=(message.equals(ServiceRestConstans.MESSAGE_UPDATE_TV_SHOW))? String.valueOf(HttpStatus.OK):
-				String.valueOf(HttpStatus.NOT_FOUND);
-
-		return new NetflixResponse<>(CommonConstants.SUCCESS,code , message);
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK);
 	}
 
 
+	/*Delete  TvShow by TvShow*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@DeleteMapping (produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<String> deleteTvShow(
-			@ApiParam(value = RestConstants.PARAMETER_CATEGORY, required = true) @RequestBody @Valid final	TvShowRest tvShowRest)
-			throws NetflixException {
+	@DeleteMapping (value = RestConstants.RESOURCE_TV_SHOW_ID)
+	public NetflixResponse<Void> deleteTvShow(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)
+			@PathVariable Long tvShowId) throws NetflixException {
 
-		String message= tvShowService.deleteTvShow(tvShowRest);
 
-		String code=(message.equals(ServiceRestConstans.MESSAGE_DELETE_TV_SHOW))? String.valueOf(HttpStatus.NO_CONTENT):
-				String.valueOf(HttpStatus.NOT_FOUND);
+		tvShowService.deleteTvShow(tvShowId);
 
-		return new NetflixResponse<>(CommonConstants.SUCCESS, code, message);
+		return new NetflixResponse<>(CommonConstants.SUCCESS,String.valueOf(HttpStatus.NO_CONTENT) , CommonConstants.OK);
+
+
 	}
 
+	/*List  TvShow´s Awards  by idTvShow*/
+	@Override
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping(value = RestConstants.RESOURCE_TV_SHOW_AWARDS, produces = MediaType.APPLICATION_JSON_VALUE)
+	public NetflixResponse<List<AwardRest>> listAllAwards(
+			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)
+			@PathVariable Long tvShowId) throws NetflixException {
 
+
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+				tvShowService.listAllAwards(tvShowId));
+	}
 
 
 }

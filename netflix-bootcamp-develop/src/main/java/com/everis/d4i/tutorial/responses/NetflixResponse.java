@@ -28,7 +28,9 @@ public class NetflixResponse<T> implements Serializable {
 		this.data = data;
 	}
 
-	public String getStatus() {
+
+
+    public String getStatus() {
 		return this.status;
 	}
 

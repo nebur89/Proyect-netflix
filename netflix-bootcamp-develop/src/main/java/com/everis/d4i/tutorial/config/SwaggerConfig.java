@@ -38,7 +38,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("Netflix").apiInfo(apiInfo()).select()
-				.paths(regex(".*" + RestConstants.APPLICATION_NAME + "/.*")).build();
+				.paths(regex(".*" +  "/.*")).build(); //RestConstants.APPLICATION_NAME +
 	}
 
 	private ApiInfo apiInfo() {

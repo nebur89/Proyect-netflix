@@ -3,9 +3,9 @@ package com.everis.d4i.tutorial.controllers;
 import java.util.List;
 
 import com.everis.d4i.tutorial.exceptions.NetflixException;
+import com.everis.d4i.tutorial.json.ActorRest;
 import com.everis.d4i.tutorial.json.ChapterRest;
 import com.everis.d4i.tutorial.responses.NetflixResponse;
-import org.springframework.web.bind.annotation.PathVariable;
 
 public interface ChapterController {
 
@@ -16,5 +16,7 @@ public interface ChapterController {
 			short chapterNumber) throws NetflixException;
 
 
-	NetflixResponse<String> renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter)throws NetflixException;
+	NetflixResponse<Void> renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter)throws NetflixException;
+
+
 }

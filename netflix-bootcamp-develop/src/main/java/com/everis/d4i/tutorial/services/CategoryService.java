@@ -7,7 +7,10 @@ import com.everis.d4i.tutorial.json.CategoryRest;
 
 public interface CategoryService {
 
+	/* Return List category */
 	List<CategoryRest> getCategories() throws NetflixException;
 
+
+	/* Create new category */
 	CategoryRest createCategories(CategoryRest categoryRest) throws NetflixException;
 }
