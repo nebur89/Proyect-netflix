@@ -68,7 +68,7 @@ public class ChapterControllerImpl implements ChapterController {
 	/* Rename chapter by  tvShowId, seasonNumber and chapterNumber and chapterNumber*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@PutMapping(value=RestConstants.RESOURCE_RENAME_CHAPTER, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value=RestConstants.RESOURCE_RENAME_CHAPTER, produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<Void> renameChapter(
 			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)	@PathVariable Long tvShowId,
 			@ApiParam(value = RestConstants.PARAMETER_SEASON_NUMBER, required = true) @PathVariable short seasonNumber,

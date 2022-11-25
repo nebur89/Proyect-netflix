@@ -46,6 +46,14 @@ public class Actor implements Serializable {
 
     public Actor() {}
 
+    public Actor(Long actorId, String name, short age, String nationality, String shortDescription) {
+        this.actorId = actorId;
+        this.name = name;
+        this.age = age;
+        this.nationality = nationality;
+        this.shortDescription = shortDescription;
+    }
+
     public Actor(Long actorId, String name, short age, String nationality, String shortDescription, Set<Chapter> chapterList) {
         this.actorId = actorId;
         this.name = name;

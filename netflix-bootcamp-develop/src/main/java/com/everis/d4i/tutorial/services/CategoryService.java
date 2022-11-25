@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.CategoryRest;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 public interface CategoryService {
 
@@ -12,5 +13,6 @@ public interface CategoryService {
 
 
 	/* Create new category */
+
 	CategoryRest createCategories(CategoryRest categoryRest) throws NetflixException;
 }

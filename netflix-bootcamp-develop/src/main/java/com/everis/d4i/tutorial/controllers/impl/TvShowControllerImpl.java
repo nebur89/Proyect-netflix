@@ -60,7 +60,7 @@ public class TvShowControllerImpl implements TvShowController {
 	/*Rename  TvShow by idTvShow*/
 	@Override
 	@ResponseStatus(HttpStatus.OK)
-	@PutMapping(value = RestConstants.RESOURCE_TV_SHOW_RENAME, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = RestConstants.RESOURCE_TV_SHOW_RENAME, produces = MediaType.APPLICATION_JSON_VALUE)
 	public NetflixResponse<Void> renameTvShow(
 			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)  @PathVariable Long tvShowId,
 			@ApiParam( value = RestConstants.PARAMETER_TV_SHOW_NAME, required = true) @PathVariable  String tvShowName)

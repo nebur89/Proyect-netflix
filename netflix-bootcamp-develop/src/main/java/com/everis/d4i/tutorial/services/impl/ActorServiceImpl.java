@@ -1,30 +1,27 @@
 package com.everis.d4i.tutorial.services.impl;
 
 import com.everis.d4i.tutorial.entities.Actor;
-import com.everis.d4i.tutorial.entities.Chapter;
-import com.everis.d4i.tutorial.entities.TvShow;
-import com.everis.d4i.tutorial.exceptions.InternalServerErrorException;
+
 import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.exceptions.NotFoundException;
 import com.everis.d4i.tutorial.json.ActorRest;
 import com.everis.d4i.tutorial.json.ActorRest2;
-import com.everis.d4i.tutorial.json.ChapterRest;
+
 import com.everis.d4i.tutorial.json.TvShowRest;
 import com.everis.d4i.tutorial.repositories.ActorRepository;
 import com.everis.d4i.tutorial.services.ActorService;
 import com.everis.d4i.tutorial.utils.constants.ExceptionConstants;
-import com.everis.d4i.tutorial.utils.constants.ServiceRestConstans;
-import org.hibernate.annotations.Fetch;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Optional;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,6 +97,8 @@ public class ActorServiceImpl implements ActorService {
 
         return   actorRepository.findById(actorId).map(actor -> modelMapper.map(actor,ActorRest.class))
                     .orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_ACTOR));
+
+
 
     }
 

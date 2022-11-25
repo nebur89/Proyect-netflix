@@ -4,6 +4,7 @@ import com.everis.d4i.tutorial.entities.Chapter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.Set;
 @JsonIgnoreProperties("chapterList")
 public class ActorRest {
@@ -101,4 +102,6 @@ public class ActorRest {
     public void setChapterList(Set<Chapter> chapterList) {
         this.chapterList = chapterList;
     }
+
+
 }
