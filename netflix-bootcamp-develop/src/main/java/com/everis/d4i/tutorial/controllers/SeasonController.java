@@ -6,6 +6,9 @@ import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.SeasonRest;
 import com.everis.d4i.tutorial.responses.NetflixResponse;
 
+/**
+ * SEASON CONTROLLER INTERFACE
+ */
 public interface SeasonController {
 
 	NetflixResponse<List<SeasonRest>> getSeasonsByTvShow(Long tvShowId) throws NetflixException;

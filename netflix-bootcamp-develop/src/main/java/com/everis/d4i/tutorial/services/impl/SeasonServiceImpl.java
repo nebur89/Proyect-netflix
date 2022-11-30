@@ -15,6 +15,9 @@ import com.everis.d4i.tutorial.repositories.SeasonRepository;
 import com.everis.d4i.tutorial.services.SeasonService;
 import com.everis.d4i.tutorial.utils.constants.ExceptionConstants;
 
+/**
+ * SEASON SERVICE IMPLEMENT
+ */
 @Service
 public class SeasonServiceImpl implements SeasonService {
 
@@ -23,12 +26,26 @@ public class SeasonServiceImpl implements SeasonService {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
+	/**
+	 * Return list seasonRest
+	 * @param tvShowId
+	 * @return List<SeasonRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	public List<SeasonRest> getSeasonsByTvShow(Long tvShowId) throws NetflixException {
 		return seasonRepository.findByTvShow_TvShowId(tvShowId).stream()
 				.map(season -> modelMapper.map(season, SeasonRest.class)).collect(Collectors.toList());
 	}
 
+
+	/**
+	 * Return Season by TvShowId And SeasonNumber
+	 * @param tvShowId
+	 * @param seasonNumber
+	 * @return SeasonRest
+	 * @throws NetflixException
+	 */
 	@Override
 	public SeasonRest getSeasonByTvShowIdAndSeasonNumber(Long tvShowId, short seasonNumber) throws NetflixException {
 		Season season = seasonRepository.findByTvShow_TvShowIdAndNumber(tvShowId, seasonNumber)

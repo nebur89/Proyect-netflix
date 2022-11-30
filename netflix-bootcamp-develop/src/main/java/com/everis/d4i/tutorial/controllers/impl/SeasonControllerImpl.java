@@ -19,6 +19,10 @@ import com.everis.d4i.tutorial.services.SeasonService;
 import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
 
+
+/**
+ * SEASON CONTROLLER INTERFACE
+ */
 @RestController
 @RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_SEASON)
 //@RequestMapping(RestConstants.RESOURCE_SEASON)
@@ -27,6 +31,13 @@ public class SeasonControllerImpl implements SeasonController {
 	@Autowired
 	private SeasonService seasonService;
 
+
+	/**
+	 * Return list seasonRest
+	 * @param tvShowId
+	 * @return NetflixResponse<List<SeasonRest>>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -35,10 +46,19 @@ public class SeasonControllerImpl implements SeasonController {
 				seasonService.getSeasonsByTvShow(tvShowId));
 	}
 
+
+	/**
+	 *Return Season by TvShowId And SeasonNumber
+	 * @param tvShowId
+	 * @param number
+	 * @return NetflixResponse<SeasonRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = RestConstants.RESOURCE_NUMBER, produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<SeasonRest> getSeasonByTvShowIdAndSeasonNumber(@PathVariable Long tvShowId,
+	public NetflixResponse<SeasonRest> getSeasonByTvShowIdAndSeasonNumber(
+			@PathVariable Long tvShowId,
 			@PathVariable short number) throws NetflixException {
 		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
 				seasonService.getSeasonByTvShowIdAndSeasonNumber(tvShowId, number));

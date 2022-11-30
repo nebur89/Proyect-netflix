@@ -1,7 +1,6 @@
 package com.everis.d4i.tutorial.services.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.doNothing;
@@ -10,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import com.everis.d4i.tutorial.entities.Actor;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
+import com.everis.d4i.tutorial.exceptions.NoContentExeption;
 import com.everis.d4i.tutorial.exceptions.NotFoundException;
 import com.everis.d4i.tutorial.json.ActorRest;
 import com.everis.d4i.tutorial.repositories.ActorRepository;
@@ -20,18 +20,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.OngoingStubbing;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+
 
 //@ExtendWith(MockitoExtension.class)
 //@MockitoSettings(strictness = Strictness.LENIENT)
@@ -44,14 +44,18 @@ class ActorServiceImplTest {
     @InjectMocks
     private ActorServiceImpl actorServiceImpl;
 
-    private static ActorRest actorRest1, actorRest2, actorRest3, actorRest4, actorRest5;
+    private static ActorRest actorRest1;
 
     private static Actor actor1, actor2, actor3, actor4,actor5;
+
+
 
     private static List<Actor> actorList;
 
     private static List<ActorRest> actorRestList;
 
+
+    private static ModelMapper modelMapper= new ModelMapper();
 
     @BeforeEach
     void setUp() {
@@ -64,8 +68,9 @@ class ActorServiceImplTest {
         actor4 = new Actor(4L, "nameActor4", (short) 34, "alemana", "The firstActor" );
         actor5 = new Actor(5L, "nameActor5", (short) 35, "belga", "The firstActor" );
 
-        actorList= new ArrayList<Actor>(){{add(actor1);add(actor2);add(actor3);add(actor4);add(actor5);}};
+        actorList= Arrays.asList(actor1,actor2,actor3,actor4,actor5);
 
+        actorRest1= modelMapper.map(actor1,ActorRest.class);
 
     }
 
@@ -79,6 +84,29 @@ class ActorServiceImplTest {
     assertEquals(actor1, actorRepository.save(actor1));
     assertNotNull(actorRepository.save(actor1));
     assertEquals(actor1.getActorId(),actorRepository.save(actor1).getActorId());
+    }
+
+
+    /*Updarte Actor*/
+    @Test
+    void updateActorTest()throws NetflixException {
+        when(actorRepository.findById(any(Long.class))).thenReturn(Optional.of(actor1));
+        when(actorRepository.save(any(Actor.class))).thenReturn(actor1);
+
+        actorRest1.setName("newName");
+        actorRest1.setAge((short) 21);
+        actorRest1.setNationality("inglesa");
+        actorRest1.setShortDescription("se ha modificado descripcion");
+
+        ActorRest actorRestUpdated = actorServiceImpl.updateActor(actorRest1);
+
+        assertNotNull(actorRestUpdated);
+        assertEquals("newName",actorRestUpdated.getName());
+        assertEquals(21,actorRestUpdated.getAge());
+        assertEquals("inglesa",actorRestUpdated.getNationality());
+        assertEquals("se ha modificado descripcion",actorRestUpdated.getShortDescription());
+
+
     }
 
 
@@ -151,12 +179,23 @@ class ActorServiceImplTest {
         assertThrows(NotFoundException.class, () -> actorServiceImpl.creatorNewActor(actorRest1));
     }
 
+
+
+    /*Update Actor Fail*/
+    @Test
+    void updateActorTestFail() throws NetflixException {
+        when(actorRepository.findById(any(Long.class))).thenThrow(NoContentExeption.class);
+        assertThrows(NoContentExeption.class, () -> actorServiceImpl.updateActor(actorRest1));
+    }
+
+
     /*Fail Delete Actor by actorId*/
     @Test
     void deleteActorTestFail()throws NetflixException {
         when(actorRepository.findById(any(Long.class))).thenThrow((NotFoundException.class));
         assertThrows(NotFoundException.class, () -> actorServiceImpl.deleteActor(1000L));
     }
+
 
 
 }

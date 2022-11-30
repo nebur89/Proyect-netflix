@@ -8,13 +8,15 @@ import com.everis.d4i.tutorial.json.ActorRest2;
 
 import java.util.List;
 
-/*ACTOR SERVICE  INTERFACE*/
+/**
+ * ACTOR SERVICE  INTERFACE
+ */
 
 public interface ActorService {
 
-    void creatorNewActor(ActorRest actorRest) throws NetflixException;
+    ActorRest creatorNewActor(ActorRest actorRest) throws NetflixException;
 
-    void updateActor(ActorRest actorRest) throws  NetflixException;
+    ActorRest updateActor(ActorRest actorRest) throws  NetflixException;
 
     void deleteActor(Long actorId)throws  NetflixException;
 

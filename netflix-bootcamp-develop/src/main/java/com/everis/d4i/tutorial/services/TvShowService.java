@@ -9,7 +9,9 @@ import com.everis.d4i.tutorial.json.TvShowRest;
 import org.apache.logging.log4j.message.Message;
 
 
-/*TV-SHOW SERVICE INTERFACE  */
+/**
+ * TV-SHOW SERVICE INTERFACE
+ */
 
 public interface TvShowService {
 
@@ -18,7 +20,7 @@ public interface TvShowService {
 
 	TvShowRest getTvShowById(Long id) throws NetflixException;
 
-	void renameTvShow(Long tvShowId, String tvShowName) throws NetflixException;
+	TvShowRest renameTvShow (Long tvShowId, String tvShowName) throws NetflixException;
 
 	void deleteTvShow(Long tvShowId) throws NetflixException;
 

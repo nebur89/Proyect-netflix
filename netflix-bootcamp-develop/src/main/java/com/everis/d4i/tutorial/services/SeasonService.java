@@ -5,6 +5,9 @@ import java.util.List;
 import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.SeasonRest;
 
+/**
+ * SEASON SERVICE INTERFACE
+ */
 public interface SeasonService {
 
 	List<SeasonRest> getSeasonsByTvShow(Long tvShowId) throws NetflixException;

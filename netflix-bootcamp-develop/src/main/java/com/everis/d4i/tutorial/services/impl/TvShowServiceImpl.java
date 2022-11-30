@@ -2,11 +2,12 @@
 package com.everis.d4i.tutorial.services.impl;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
 import com.everis.d4i.tutorial.entities.TvShow;
+import com.everis.d4i.tutorial.exceptions.NoContentExeption;
 import com.everis.d4i.tutorial.json.AwardRest;
 
 
+import com.everis.d4i.tutorial.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,9 @@ import org.slf4j.LoggerFactory;
 import com.everis.d4i.tutorial.utils.constants.ExceptionConstants;
 
 
-/*TV-SHOW SERVICE INTERFACE  */
+/**
+ * TV-SHOW SERVICE IMPLEMENT
+ */
 
 @Service
 public class TvShowServiceImpl implements TvShowService {
@@ -32,14 +35,22 @@ public class TvShowServiceImpl implements TvShowService {
 	@Autowired
 	private TvShowRepository tvShowRepository;
 
+	private CategoryRepository categoryRepository;
+
 	private ModelMapper modelMapper = new ModelMapper();
 
 
-
-
-	/*Return list TvShow by idCategory*/
+	/**
+	 * Return list TvShow by idCategory
+	 * @param categoryId
+	 * @return List<TvShowRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	public List<TvShowRest> getTvShowsByCategory(Long categoryId) throws NetflixException {
+
+		categoryRepository.findById(categoryId)
+				.orElseThrow( () -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_CATEGORY));
 
 		return tvShowRepository.findByCategoryList_CategoryId(categoryId)
 				.stream()
@@ -49,7 +60,12 @@ public class TvShowServiceImpl implements TvShowService {
 	}
 
 
-	/*Return TvShow by idTvShow*/
+	/**
+	 * Return TvShow by idTvShow
+	 * @param id
+	 * @return TvShowRest
+	 * @throws NetflixException
+	 */
 	@Override
 	public TvShowRest getTvShowById(Long id) throws NetflixException {
 
@@ -61,31 +77,50 @@ public class TvShowServiceImpl implements TvShowService {
 
 	}
 
-	/*Rename  TvShow by idTvShow*/
 
+
+	/**
+	 * Rename  TvShow by idTvShow
+	 * @param tvShowId
+	 * @param tvShowName
+	 * @return TvShowRest
+	 * @throws NetflixException
+	 */
 	@Override
-	public void renameTvShow(Long tvShowId, String tvShowName) throws NetflixException {
+	public TvShowRest renameTvShow(Long tvShowId, String tvShowName) throws NetflixException {
 
 	    TvShow tvShow= tvShowRepository.findById(tvShowId)
-				.orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_TVSHOW));
+				.orElseThrow(() -> new NoContentExeption(ExceptionConstants.MESSAGE_INEXISTENT_TVSHOW));
 		tvShow.setName(tvShowName);
-	  tvShowRepository.save( tvShow);
+
+		TvShow tvShow1= tvShowRepository.save( tvShow);
+		return  modelMapper.map(tvShow1, TvShowRest.class);
 
 	}
 
-	/*Delete  TvShow by TvShow*/
+
+	/**
+	 * Delete  TvShow by TvShow
+	 * @param tvShowId
+	 * @throws NetflixException
+	 */
 	@Override
 	public void deleteTvShow(Long tvShowId) throws NetflixException {
 
 		TvShow tvShow=  tvShowRepository.findById(tvShowId)
-				.orElseThrow(() -> new EntityNotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_TVSHOW));
+				.orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_TVSHOW));
 
 		tvShowRepository.delete(tvShow);
 
 	}
 
 
-	/*List  TvShow´s Awards  by idTvShow*/
+	/**
+	 * List  TvShow´s Awards  by idTvShow
+	 * @param tvShowId
+	 * @return List<AwardRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	public List<AwardRest> listAllAwards(Long tvShowId) throws NetflixException {
 

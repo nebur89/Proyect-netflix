@@ -6,6 +6,10 @@ import com.everis.d4i.tutorial.exceptions.NetflixException;
 import com.everis.d4i.tutorial.json.CategoryRest;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 
+
+/**
+ * CATEGORY SERVICE INTERFACE
+ */
 public interface CategoryService {
 
 	/* Return List category */

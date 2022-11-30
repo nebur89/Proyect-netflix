@@ -19,6 +19,9 @@ import com.everis.d4i.tutorial.utils.constants.RestConstants;
 
 import io.swagger.annotations.ApiParam;
 
+/**
+ * CATEGORY CONTROLLER IMPLEMENT
+ */
 @RestController
 //@RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_CATEGORY)
 @RequestMapping(RestConstants.RESOURCE_CATEGORY)
@@ -28,9 +31,11 @@ public class CategoryControllerImpl implements CategoryController {
 	private CategoryService categoryService;
 
 
-
-
-	/* Return List category */
+	/**
+	 * Return List category
+	 * @return NetflixResponse<List<CategoryRest>>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,7 +46,12 @@ public class CategoryControllerImpl implements CategoryController {
 	}
 
 
-	/* Create new category */
+	/**
+	 * Create new category
+	 * @param categoryRest
+	 * @return NetflixResponse<CategoryRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +59,7 @@ public class CategoryControllerImpl implements CategoryController {
 			@ApiParam(value = RestConstants.PARAMETER_CATEGORY, required = true) @RequestBody @Valid final CategoryRest categoryRest)
 			throws NetflixException {
 
-		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.CREATED), CommonConstants.OK,
 				categoryService.createCategories(categoryRest));
 	}
 

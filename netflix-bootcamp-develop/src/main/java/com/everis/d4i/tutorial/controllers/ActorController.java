@@ -7,12 +7,15 @@ import com.everis.d4i.tutorial.responses.NetflixResponse;
 
 import java.util.List;
 
-/*ACTOR CONTROLLER INTERFACE*/
+/**
+ * ACTOR CONTROLLER INTERFACE
+ */
+
 public interface ActorController {
 
-        NetflixResponse<Void> createNewActor(ActorRest actorRest) throws NetflixException;
+        NetflixResponse<ActorRest> createNewActor(ActorRest actorRest) throws NetflixException;
 
-       NetflixResponse<Void> updateActor(ActorRest actorRest) throws NetflixException;
+       NetflixResponse<ActorRest> updateActor(ActorRest actorRest) throws NetflixException;
 
        NetflixResponse<Void> deleteActor(Long actorId)throws  NetflixException;
 
@@ -21,5 +24,6 @@ public interface ActorController {
        NetflixResponse<ActorRest> findByID(Long actorId)throws NetflixException;
 
        NetflixResponse<ActorRest2> findActorWithTvShowAndChapters(Long actorId)throws NetflixException;
+
 
 }

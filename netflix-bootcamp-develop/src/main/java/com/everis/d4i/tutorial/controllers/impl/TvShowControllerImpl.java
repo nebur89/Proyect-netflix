@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import com.everis.d4i.tutorial.json.AwardRest;
-import com.everis.d4i.tutorial.utils.constants.ServiceRestConstans;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +18,9 @@ import com.everis.d4i.tutorial.services.TvShowService;
 import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
 
-import javax.validation.Valid;
-
-/*TV-SHOW CONTROLLER IMPLEMENT */
+/**
+ * TV-SHOW CONTROLLER IMPLEMENT
+ */
 
 @RestController
 //@RequestMapping(RestConstants.APPLICATION_NAME + RestConstants.API_VERSION_1 + RestConstants.RESOURCE_TV_SHOW)
@@ -32,8 +31,12 @@ public class TvShowControllerImpl implements TvShowController {
 	private TvShowService tvShowService;
 
 
-
-	/*Return list TvShow by categoryId*/
+	/**
+	 * Return list TvShow by categoryId
+	 * @param categoryId
+	 * @return NetflixResponse<List<TvShowRest>>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = RestConstants.RESOURCE_CATEGORY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +48,12 @@ public class TvShowControllerImpl implements TvShowController {
 	}
 
 
-	/*Return TvShow by idTvShow*/
+	/**
+	 * Return TvShow by idTvShow
+	 * @param id
+	 * @return Return TvShow by idTvShow
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = RestConstants.RESOURCE_ID, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,23 +64,33 @@ public class TvShowControllerImpl implements TvShowController {
 	}
 
 
-
-	/*Rename  TvShow by idTvShow*/
+	/**
+	 * Rename  tvShow by 0idTvShow
+	 * @param tvShowId
+	 * @param tvShowName
+	 * @return NetflixResponse<TvShowRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@PatchMapping(value = RestConstants.RESOURCE_TV_SHOW_RENAME, produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetflixResponse<Void> renameTvShow(
+	public NetflixResponse<TvShowRest> renameTvShow(
 			@ApiParam(value = RestConstants.PARAMETER_TV_SHOW_ID, required = true)  @PathVariable Long tvShowId,
 			@ApiParam( value = RestConstants.PARAMETER_TV_SHOW_NAME, required = true) @PathVariable  String tvShowName)
 			throws NetflixException {
 
-		tvShowService.renameTvShow(tvShowId, tvShowName);
 
-		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK);
+		return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+				tvShowService.renameTvShow(tvShowId, tvShowName));
 	}
 
 
-	/*Delete  TvShow by TvShow*/
+	/**
+	 * Delete  tvShow by TvShow
+	 * @param tvShowId
+	 * @return NetflixResponse<Void>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping (value = RestConstants.RESOURCE_TV_SHOW_ID)
@@ -88,7 +106,15 @@ public class TvShowControllerImpl implements TvShowController {
 
 	}
 
-	/*List  TvShow´s Awards  by idTvShow*/
+
+
+
+	/**
+	 * List  TvShow´s Awards  by idTvShow
+	 * @param tvShowId
+	 * @return NetflixResponse<List<AwardRest>>
+	 * @throws NetflixException
+	 */
 	@Override
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = RestConstants.RESOURCE_TV_SHOW_AWARDS, produces = MediaType.APPLICATION_JSON_VALUE)

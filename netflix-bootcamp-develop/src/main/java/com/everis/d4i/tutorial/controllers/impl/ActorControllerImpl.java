@@ -11,17 +11,19 @@ import com.everis.d4i.tutorial.services.ActorService;
 import com.everis.d4i.tutorial.utils.constants.CommonConstants;
 import com.everis.d4i.tutorial.utils.constants.RestConstants;
 ;
-import com.everis.d4i.tutorial.utils.constants.ServiceRestConstans;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*ACTOR CONTROLLER IMPLEMENT*/
+/**
+ * ACTOR CONTROLLER IMPLEMENT
+ */
 
 
 @RestController
@@ -36,89 +38,125 @@ public class ActorControllerImpl implements ActorController {
     ActorRepository actorRepository;
 
 
-    /*Create new Actor*/
+    /**
+     * Create new Actor
+     *
+     * @param actorRest
+     * @return NetflixResponse<ActorRest>
+     * @throws NetflixException
+     */
+
     @Override
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public NetflixResponse<Void> createNewActor(
+    public NetflixResponse<ActorRest> createNewActor(
             @ApiParam(value = RestConstants.PARAMETER_ACTOR, required = true)
             @RequestBody ActorRest actorRest) throws NetflixException {
 
-            actorService.creatorNewActor(actorRest);
 
-            return new NetflixResponse<>( CommonConstants.SUCCESS, String.valueOf(HttpStatus.CREATED), CommonConstants.OK);
+        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.CREATED), CommonConstants.OK,
+                actorService.creatorNewActor(actorRest));
     }
 
 
-    /*Update Actor */
+    /**
+     * Update Actor
+     *
+     * @param actorRest
+     * @return NetflixResponse<ActorRest>
+     * @throws NetflixException
+     */
     @Override
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public NetflixResponse<Void> updateActor(
-            @ApiParam(value= RestConstants.PARAMETER_ACTOR, required = true)
+    public NetflixResponse<ActorRest> updateActor(
+            @ApiParam(value = RestConstants.PARAMETER_ACTOR, required = true)
             @RequestBody ActorRest actorRest) throws NetflixException {
 
-         actorService.updateActor(actorRest);
 
-        return new NetflixResponse<>( CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK);
+        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
+                actorService.updateActor(actorRest));
     }
 
 
-
-/* Delete Actor by actorId*/
+    /**
+     * Delete Actor by actorId
+     *
+     * @param actorId
+     * @return NetflixResponse<Void>
+     * @throws NetflixException
+     */
     @Override
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = RestConstants.RESOURCE_ACTOR_ID)
     public NetflixResponse<Void> deleteActor(
             @ApiParam(value = RestConstants.PARAMETER_ACTOR_ID, required = true)
-           @PathVariable Long actorId) throws NetflixException {
+            @PathVariable Long actorId) throws NetflixException {
 
-         actorService.deleteActor(actorId);
+        actorService.deleteActor(actorId);
 
-        return new NetflixResponse<>( CommonConstants.SUCCESS, String.valueOf(HttpStatus.NO_CONTENT), CommonConstants.OK);
+        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.NO_CONTENT), CommonConstants.OK);
 
     }
 
-/*Return list all Actor*/
+    /**
+     * Return list all Actor
+     *
+     * @return NetflixResponse<List < ActorRest>>
+     * @throws NetflixException
+     */
     @Override
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = RestConstants.RESOURCE_ACTOR_LIST, produces = MediaType.APPLICATION_JSON_VALUE)
     public NetflixResponse<List<ActorRest>> listAllActor()
             throws NetflixException {
 
-        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK),CommonConstants.OK,
+        System.out.println("entrada en controlador");
+
+        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
                 actorService.listAllActor());
 
     }
 
 
-    /*Return Actor by actorId*/
+    /**
+     * Return Actor by actorId
+     *
+     * @param actorId
+     * @return NetflixResponse<ActorRest>
+     * @throws NetflixException
+     */
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping( value = RestConstants.RESOURCE_ACTOR_ID,   produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = RestConstants.RESOURCE_ACTOR_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public NetflixResponse<ActorRest> findByID(
             @ApiParam(value = RestConstants.PARAMETER_ACTOR_ID, required = true)
-                    @PathVariable Long actorId) throws NetflixException {
+            @PathVariable Long actorId) throws NetflixException {
 
-        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK),CommonConstants.OK,
+        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
                 actorService.findById(actorId));
 
     }
 
-    /*Return  list tvShow and list chapter from Actor  by actorId*/
+    /**
+     * Return  list tvShow and list chapter from Actor  by actorId
+     *
+     * @param actorId
+     * @return NetflixResponse<ActorRest2>
+     * @throws NetflixException
+     */
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping( value = RestConstants.RESOURCE_ACTOR_FILE,   produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = RestConstants.RESOURCE_ACTOR_FILE, produces = MediaType.APPLICATION_JSON_VALUE)
     public NetflixResponse<ActorRest2> findActorWithTvShowAndChapters(
             @ApiParam(value = RestConstants.PARAMETER_ACTOR_ID, required = true)
             @RequestParam Long actorId) throws NetflixException {
 
 
-        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK),CommonConstants.OK,
+        return new NetflixResponse<>(CommonConstants.SUCCESS, String.valueOf(HttpStatus.OK), CommonConstants.OK,
                 actorService.findAllTvShowAndChapter(actorId));
 
     }
-
 
 
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.everis.d4i.tutorial.exceptions.InternalServerErrorException;
+import com.everis.d4i.tutorial.exceptions.NoContentExeption;
 import com.everis.d4i.tutorial.utils.constants.ServiceRestConstans;
 import org.modelmapper.ModelMapper;
 
@@ -27,7 +28,9 @@ import com.everis.d4i.tutorial.utils.constants.ExceptionConstants;
 import javax.persistence.EntityNotFoundException;
 
 
-/* CHAPTER SERVICE IMPLEMENT*/
+/**
+ * CHAPTER SERVICE IMPLEMENT
+ */
 @Service
 public class ChapterServiceImpl implements ChapterService {
 
@@ -40,7 +43,13 @@ public class ChapterServiceImpl implements ChapterService {
 	private ModelMapper modelMapper = new ModelMapper();
 
 
-	/* Return List chapter by tvShowId and seasonNumber*/
+	/**
+	 * Return List chapter by tvShowId and seasonNumber
+	 * @param tvShowId
+	 * @param seasonNumber
+	 * @return List<ChapterRest>
+	 * @throws NetflixException
+	 */
 	@Override
 	public List<ChapterRest> getChaptersByTvShowIdAndSeasonNumber(Long tvShowId, short seasonNumber)
 			throws NetflixException {
@@ -52,8 +61,14 @@ public class ChapterServiceImpl implements ChapterService {
 	}
 
 
-
-	/* Return chapter by tvShowId , seasonNumber and chapterNumber*/
+	/**
+	 * Return chapter by tvShowId , seasonNumber and chapterNumber
+	 * @param tvShowId
+	 * @param seasonNumber
+	 * @param chapterNumber
+	 * @return ChapterRest
+	 * @throws NetflixException
+	 */
 	@Override
 	public ChapterRest getChapterByTvShowIdAndSeasonNumberAndChapterNumber(Long tvShowId, short seasonNumber,
 			short chapterNumber) throws NetflixException {
@@ -64,16 +79,27 @@ public class ChapterServiceImpl implements ChapterService {
 	}
 
 
-
-	/* Rename chapter by tvShowId , seasonNumber and chapterNumber*/
+	/**
+	 * Rename chapter by tvShowId , seasonNumber and chapterNumber
+	 * @param tvShowId
+	 * @param seasonNumber
+	 * @param chapterNumber
+	 * @param newNameChapter
+	 * @return ChapterRest
+	 * @throws NetflixException
+	 */
 	@Override
-	public void renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter) throws NetflixException {
+	public ChapterRest renameChapter(Long tvShowId, short seasonNumber, short chapterNumber , String newNameChapter) throws NetflixException {
 
 			Chapter chapter = chapterRepository.findBySeason_TvShow_TvShowIdAndSeason_NumberAndNumber(tvShowId,seasonNumber,chapterNumber)
-					.orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_CHAPTER));
+					.orElseThrow(() -> new NoContentExeption(ExceptionConstants.MESSAGE_INEXISTENT_CHAPTER));
 
 			chapter.setName(newNameChapter);
-			chapterRepository.save(chapter);
+		Chapter chapter1 = chapterRepository.save(chapter);
+
+		return modelMapper.map(chapter1,ChapterRest.class);
+
+
 
 	}
 }

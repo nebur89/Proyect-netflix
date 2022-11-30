@@ -3,6 +3,7 @@ package com.everis.d4i.tutorial.services.impl;
 import com.everis.d4i.tutorial.entities.Actor;
 
 import com.everis.d4i.tutorial.exceptions.NetflixException;
+import com.everis.d4i.tutorial.exceptions.NoContentExeption;
 import com.everis.d4i.tutorial.exceptions.NotFoundException;
 import com.everis.d4i.tutorial.json.ActorRest;
 import com.everis.d4i.tutorial.json.ActorRest2;
@@ -12,6 +13,7 @@ import com.everis.d4i.tutorial.repositories.ActorRepository;
 import com.everis.d4i.tutorial.services.ActorService;
 import com.everis.d4i.tutorial.utils.constants.ExceptionConstants;
 
+import com.everis.d4i.tutorial.utils.constants.RestConstants;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +27,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/*ACTOR CONTROLLER IMPLEMENT*/
+/**
+ * ACTOR SERVICE IMPLEMENT
+ */
 
 @Service
 public class ActorServiceImpl implements ActorService {
@@ -38,36 +42,53 @@ public class ActorServiceImpl implements ActorService {
 
     private ModelMapper modelMapper = new ModelMapper();
 
-    /*Create new Actor*/
+    /**
+     * Create new Actor
+     * @param actorRest
+     * @return ActorRest
+     * @throws NetflixException
+     */
     @Override
-    public void creatorNewActor(ActorRest actorRest) throws NetflixException {
+    public ActorRest creatorNewActor(ActorRest actorRest) throws NetflixException {
 
             Actor actor = modelMapper.map(actorRest, Actor.class);
-            actorRepository.save(actor);
+
+            actor =  actorRepository.save(actor);
+
+            return modelMapper.map(actor,ActorRest.class);
 
     }
 
 
-    /*Update Actor */
+    /**
+     * Update Actor
+     * @param actorRest
+     * @return ActorRest
+     * @throws NetflixException
+     */
     @Override
-    public void updateActor(ActorRest actorRest) throws NetflixException {
+    public ActorRest updateActor(ActorRest actorRest) throws NetflixException {
 
       Actor actor=   actorRepository.findById(actorRest.getActorId())
-                .orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_ACTOR));
+                .orElseThrow(() -> new NoContentExeption(ExceptionConstants.MESSAGE_INEXISTENT_ACTOR));
 
         actor.setName(actorRest.getName());
         actor.setAge(actorRest.getAge());
         actor.setNationality(actorRest.getNationality());
         actor.setShortDescription(actorRest.getShortDescription());
 
-        actorRepository.save(actor);
 
+       Actor actor1=  actorRepository.save(actor);
+
+       return modelMapper.map(actor1,ActorRest.class);
     }
 
 
-
-
-    /* Delete Actor by actorId*/
+    /**
+     * Delete Actor by actorId
+     * @param actorId
+     * @throws NetflixException
+     */
     @Override
     public void deleteActor(Long actorId) throws NetflixException {
 
@@ -79,7 +100,11 @@ public class ActorServiceImpl implements ActorService {
     }
 
 
-    /*Return list all Actor*/
+    /**
+     * Return list all Actor
+     * @return List<ActorRest>
+     * @throws NetflixException
+     */
     @Override
     public List<ActorRest> listAllActor() throws NetflixException {
 
@@ -91,7 +116,12 @@ public class ActorServiceImpl implements ActorService {
     }
 
 
-    /*Return Actor by actorId*/
+    /**
+     * Return Actor by actorId
+     * @param actorId
+     * @return ActorRest
+     * @throws NetflixException
+     */
     @Override
     public ActorRest findById(Long actorId) throws NetflixException {
 
@@ -102,7 +132,12 @@ public class ActorServiceImpl implements ActorService {
 
     }
 
-
+    /**
+     * Return actorRest2 by idActor (with list tvShow and list chapters)
+     * @param actorId
+     * @return ActorRest2
+     * @throws NetflixException
+     */
     @Override
     public ActorRest2 findAllTvShowAndChapter(Long actorId) throws NetflixException {
 
@@ -110,7 +145,6 @@ public class ActorServiceImpl implements ActorService {
         /*Check if exist*/
        Actor actor=  actorRepository.findById(actorId)
                .orElseThrow(() -> new NotFoundException(ExceptionConstants.MESSAGE_INEXISTENT_ACTOR));
-
 
        /*Create list TvShoeRest*/
        Set<TvShowRest> chaTvShowSet= actor.getChapterList()
@@ -125,7 +159,6 @@ public class ActorServiceImpl implements ActorService {
 
         /*Add list tvShowsRest to actorRest2 */
         actorRest2.setTvShowRestsList(chaTvShowSet);
-
 
         return  actorRest2;
 
